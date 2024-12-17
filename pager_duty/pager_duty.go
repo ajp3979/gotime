@@ -23,6 +23,7 @@ const acceptHeaderType = "application/vnd.pagerduty+json;version=2"
 
 var GetEnvVars = getEnvVars
 
+// getEnvVars retrieves the PagerDuty API key and schedule from environment variables.
 func getEnvVars() map[string]string {
 	apiKey := os.Getenv(apiKeyEnvVar)
 	if apiKey == "" {
@@ -38,6 +39,8 @@ func getEnvVars() map[string]string {
 	}
 }
 
+// PagerDuty retrieves the on-call SIRT engineer's email address from the PagerDuty API.
+// It takes the current time as input and returns the email address and any errors encountered.
 func PagerDuty(currentTime time.Time) (string, error) {
 	enVars := GetEnvVars()
 	startTime := currentTime.Add(-1 * time.Hour).Format(time.RFC3339)
@@ -83,6 +86,8 @@ func PagerDuty(currentTime time.Time) (string, error) {
 	return "On-Call SIRT " + users[0].Email, nil
 }
 
+// MakeHTTPRequest makes an HTTP GET request to the specified URL with the given headers.
+// It returns the HTTP response and any errors encountered.
 func MakeHTTPRequest(url string, headers map[string]string) (*http.Response, error) {
 	client := http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
